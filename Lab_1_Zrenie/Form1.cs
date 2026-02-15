@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Lab_1_Zrenie
 {
@@ -233,6 +234,106 @@ namespace Lab_1_Zrenie
             pictureBox1.Image?.Dispose();
             pictureBox1.Image = bmp;
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            int sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+            if (dataGridView1.Rows.Count == 0) return;
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                try
+                {
+                    int x1 = int.Parse(row.Cells[0].Value?.ToString());
+                    int y1 = int.Parse(row.Cells[1].Value?.ToString());
+                    sumX += x1;
+                    sumY += y1;
+                    sumXY += y1 * x1;
+                    sumXX += x1 * x1;
+                    count++;
+                }
+
+                catch { }
+            }
+
+
+            double a = ((count * sumXY) - (sumX * sumY)) / (count * sumXX - (sumX * sumX));
+            double b = (sumY - (a * sumX)) / count;
+            double avgX = (double)sumX / count;
+            double avgY = (double)sumY / count;
+
+
+
+            var bmp = new Bitmap(400, 400);
+            using (var gfx = Graphics.FromImage(bmp))
+                gfx.Clear(Color.Black);
+
+            const double scale = 400.0 / 1024.0;
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.IsNewRow) continue;
+                try
+                {
+                    int x = int.Parse(row.Cells[0].Value?.ToString() ?? "0");
+                    int y = int.Parse(row.Cells[1].Value?.ToString() ?? "0");
+                    int z = int.Parse(row.Cells[2].Value?.ToString() ?? "0");
+
+                    int px = (int)(x * scale);
+                    int py = 400 - 1 - (int)(y * scale);
+                    px = Math.Max(0, Math.Min(px, 400 - 1));
+                    py = Math.Max(0, Math.Min(py, 400 - 1));
+
+                    Color color = GetIronColor(z);
+
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            int nx = px + dx;
+                            int ny = py + dy;
+                            if (nx >= 0 && nx < 400 && ny >= 0 && ny < 400)
+                            {
+                                bmp.SetPixel(nx, ny, color);
+                            }
+                        }
+                    }
+                }
+
+                catch { }
+            }
+
+            using (var gfx = Graphics.FromImage(bmp))
+            {
+                //Линия регрессии
+                double y0 = a * 0 + b;
+                double y1023 = a * 1023 + b;
+                //преобразование данных из [0; 1023] в [0; 399]
+                int x1 = 0;
+                int y1 = 399 - (int)(y0 * 400.0 / 1024.0);
+                int x2 = 399;
+                int y2 = 399 - (int)(y1023 * 400.0 / 1024.0);
+
+                gfx.DrawLine(new Pen(Color.Red, 2), x1, y1, x2, y2);
+
+
+                //Средняя X
+                int xPixel = (int)(avgX * 400.0 / 1024.0);
+                gfx.DrawLine(Pens.Blue, xPixel, 0, xPixel, 399);
+
+
+                //Средняя Y
+                int yPixel = (int)(399 - (avgY * 400.0 / 1024.0));
+                gfx.DrawLine(Pens.Green, 0, yPixel, 399, yPixel);
+            }
+
+            pictureBox1.Image = bmp;
+        }
+
+
 
         private void label1_Click(object sender, EventArgs e)
         {

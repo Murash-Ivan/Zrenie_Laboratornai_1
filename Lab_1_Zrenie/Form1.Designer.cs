@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -47,6 +47,7 @@
             this.txtPeriod = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
+            this.btnLine = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -135,8 +136,8 @@
             // 
             // X
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.X.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.X.DefaultCellStyle = dataGridViewCellStyle1;
             this.X.HeaderText = "X";
             this.X.MinimumWidth = 10;
             this.X.Name = "X";
@@ -144,8 +145,8 @@
             // 
             // Y
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Y.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Y.DefaultCellStyle = dataGridViewCellStyle2;
             this.Y.HeaderText = "Y";
             this.Y.MinimumWidth = 10;
             this.Y.Name = "Y";
@@ -153,8 +154,8 @@
             // 
             // Z
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Z.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Z.DefaultCellStyle = dataGridViewCellStyle3;
             this.Z.HeaderText = "Z";
             this.Z.MinimumWidth = 10;
             this.Z.Name = "Z";
@@ -210,11 +211,23 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // btnLine
+            // 
+            this.btnLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnLine.Location = new System.Drawing.Point(494, 764);
+            this.btnLine.Name = "btnLine";
+            this.btnLine.Size = new System.Drawing.Size(445, 132);
+            this.btnLine.TabIndex = 12;
+            this.btnLine.Text = "Отобразить регрессию и средние ";
+            this.btnLine.UseVisualStyleBackColor = true;
+            this.btnLine.Click += new System.EventHandler(this.button4_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2062, 971);
+            this.Controls.Add(this.btnLine);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtPeriod);
@@ -255,6 +268,7 @@
         private System.Windows.Forms.TextBox txtPeriod;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnLine;
     }
 }
 
