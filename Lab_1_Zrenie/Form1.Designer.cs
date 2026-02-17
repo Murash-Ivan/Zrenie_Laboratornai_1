@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -48,6 +48,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.btnLine = new System.Windows.Forms.Button();
+            this.Claster = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtRad = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnClass = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -125,7 +129,8 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.X,
             this.Y,
-            this.Z});
+            this.Z,
+            this.Claster});
             this.dataGridView1.Location = new System.Drawing.Point(433, 349);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 82;
@@ -136,8 +141,8 @@
             // 
             // X
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.X.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.X.DefaultCellStyle = dataGridViewCellStyle4;
             this.X.HeaderText = "X";
             this.X.MinimumWidth = 10;
             this.X.Name = "X";
@@ -145,8 +150,8 @@
             // 
             // Y
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Y.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Y.DefaultCellStyle = dataGridViewCellStyle5;
             this.Y.HeaderText = "Y";
             this.Y.MinimumWidth = 10;
             this.Y.Name = "Y";
@@ -154,8 +159,8 @@
             // 
             // Z
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Z.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Z.DefaultCellStyle = dataGridViewCellStyle6;
             this.Z.HeaderText = "Z";
             this.Z.MinimumWidth = 10;
             this.Z.Name = "Z";
@@ -222,11 +227,50 @@
             this.btnLine.UseVisualStyleBackColor = true;
             this.btnLine.Click += new System.EventHandler(this.button4_Click);
             // 
+            // Claster
+            // 
+            this.Claster.HeaderText = "Кластер";
+            this.Claster.MinimumWidth = 10;
+            this.Claster.Name = "Claster";
+            this.Claster.Width = 200;
+            // 
+            // txtRad
+            // 
+            this.txtRad.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtRad.Location = new System.Drawing.Point(29, 1028);
+            this.txtRad.Name = "txtRad";
+            this.txtRad.Size = new System.Drawing.Size(308, 49);
+            this.txtRad.TabIndex = 13;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(22, 965);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(145, 42);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Радиус";
+            // 
+            // btnClass
+            // 
+            this.btnClass.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnClass.Location = new System.Drawing.Point(494, 945);
+            this.btnClass.Name = "btnClass";
+            this.btnClass.Size = new System.Drawing.Size(445, 132);
+            this.btnClass.TabIndex = 15;
+            this.btnClass.Text = "Отобразить кластеры";
+            this.btnClass.UseVisualStyleBackColor = true;
+            this.btnClass.Click += new System.EventHandler(this.btnClass_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2062, 971);
+            this.ClientSize = new System.Drawing.Size(2062, 1122);
+            this.Controls.Add(this.btnClass);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtRad);
             this.Controls.Add(this.btnLine);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label2);
@@ -269,6 +313,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnLine;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Claster;
+        private System.Windows.Forms.TextBox txtRad;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnClass;
     }
 }
 

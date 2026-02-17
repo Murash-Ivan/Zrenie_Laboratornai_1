@@ -333,6 +333,168 @@ namespace Lab_1_Zrenie
             pictureBox1.Image = bmp;
         }
 
+        private void btnClass_Click(object sender, EventArgs e)
+        {
+            double radius = double.Parse(txtRad.Text);
+
+            List<int> xs = new List<int>();
+            List<int> ys = new List<int>();
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                try
+                {
+                    xs.Add(int.Parse(row.Cells[0].Value?.ToString()));
+                    ys.Add(int.Parse(row.Cells[1].Value?.ToString()));
+                }
+                catch { }
+            }
+
+            int[] clusterId = new int[xs.Count];
+            for (int i = 0; i < clusterId.Length; i++)
+            {
+                clusterId[i] = -1;
+            }
+
+            List<List<int>> clusters = new List<List<int>>();
+
+
+
+            int currentClusterID = 0;
+
+            for (int i = 0; i < xs.Count; i++)
+            {
+                if (clusterId[i] != -1) continue;
+
+                List<int> currentCluster = new List<int>();
+                currentCluster.Add(i);
+                clusterId[i] = currentClusterID;
+
+                for (int j = 0; j < xs.Count; j++)
+                {
+                    if (j == i || clusterId[j] != -1) continue;
+
+                    int dx = xs[i] - xs[j];
+                    int dy = ys[i] - ys[j];
+                    double dist = dx * dx + dy * dy;
+                    double rad = radius * radius;
+
+                    if (dist <= rad)
+                    {
+                        currentCluster.Add(j);
+                        clusterId [j] = currentClusterID;
+                    }
+                }
+                clusters.Add(currentCluster);
+                currentClusterID++;
+            }
+
+
+            // визуализация
+
+            var bmp = new Bitmap(400, 400);
+            using (var gfx = Graphics.FromImage(bmp))
+            {
+                gfx.Clear(Color.Black);
+
+                Color[] clusterColor = new Color[] {Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan, Color.Magenta, Color.Orange, Color.Purple, Color.Lime, Color.Pink, Color.Gold, Color.Salmon };
+                Color noiseColor = Color.FromArgb(64, 64, 64);
+
+                const double scale = 400.0 / 1024.0;
+
+
+                for (int i = 0; i < xs.Count; i++)
+                {
+                    Color pointColor;
+                    if (clusterId[i] == -1)
+                    {
+                        pointColor = noiseColor;
+                    }
+                    else
+                    {
+                        pointColor = clusterColor[clusterId[i] % clusterColor.Length];
+                    }
+
+                    int px = (int)(xs[i] * scale);
+                    int py = 399 - (int)(ys[i] * scale);
+
+                    px = Math.Max(0, Math.Min(px, 399));
+                    py = Math.Max(0, Math.Min(py, 399));
+
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            int nx = px + dx;
+                            int ny = py + dy;
+                            if (nx >= 0 && nx < 400 && ny >= 0 && ny < 400)
+                            {
+                                bmp.SetPixel(nx, ny, pointColor);
+                            }
+                        }
+                    }
+                }
+
+                float radiusInPixel = (float)(radius * scale);
+                Font font = new Font("Arial", 8, FontStyle.Bold);
+                Brush textBrush = Brushes.White;
+                Pen circlePen = new Pen(Color.White, 1.5f);
+
+                for (int k = 0; k < clusters.Count; k++)
+                {
+                    double sumX = 0, sumY = 0;
+                    foreach (int idx in clusters[k])
+                    {
+                        sumX += xs[idx];
+                        sumY += ys[idx];
+                    }
+
+                    double centerX = sumX / clusters[k].Count;
+                    double centerY = sumY / clusters[k].Count;
+
+                    float px = (float)(centerX * scale);
+                    float py = 399 - (float)(centerY * scale);
+
+                    px = Math.Max(radiusInPixel, Math.Min(px, 400 - radiusInPixel));
+                    py = Math.Max(radiusInPixel, Math.Min(py, 400 - radiusInPixel));
+
+                    float rectX = px - radiusInPixel;
+                    float rectY = py - radiusInPixel;
+                    gfx.DrawEllipse(circlePen, rectX, rectY, radiusInPixel * 2, radiusInPixel * 2);
+
+
+
+                    string clusterNum = (k+1).ToString();
+                    SizeF textSize = gfx.MeasureString(clusterNum, font);
+                    gfx.DrawString(clusterNum, font, textBrush, px - textSize.Width / 2, py - textSize.Height / 2);
+                }
+                font.Dispose();
+            }
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = bmp;
+
+
+            int dataIndex = 0;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                if (dataIndex >= clusterId.Length)
+                {
+                    row.Cells[3].Value = "—";
+                    continue;
+                }
+                if (clusterId[dataIndex] == -1)
+                    row.Cells[3].Value = "Шум";
+                else
+                    row.Cells[3].Value = (clusterId[dataIndex] + 1).ToString();
+
+                dataIndex++;
+            }
+        }
+
 
 
         private void label1_Click(object sender, EventArgs e)
@@ -344,7 +506,5 @@ namespace Lab_1_Zrenie
         {
 
         }
-
-        
     }
 }
