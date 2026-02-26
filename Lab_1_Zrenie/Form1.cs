@@ -359,9 +359,6 @@ namespace Lab_1_Zrenie
             }
 
             List<List<int>> clusters = new List<List<int>>();
-
-
-
             int currentClusterID = 0;
 
             for (int i = 0; i < xs.Count; i++)
@@ -384,62 +381,48 @@ namespace Lab_1_Zrenie
                     if (dist <= rad)
                     {
                         currentCluster.Add(j);
-                        clusterId [j] = currentClusterID;
+                        clusterId[j] = currentClusterID;
                     }
                 }
                 clusters.Add(currentCluster);
                 currentClusterID++;
             }
-
-
-            // визуализация
-
             var bmp = new Bitmap(400, 400);
             using (var gfx = Graphics.FromImage(bmp))
             {
                 gfx.Clear(Color.Black);
 
-                Color[] clusterColor = new Color[] {Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan, Color.Magenta, Color.Orange, Color.Purple, Color.Lime, Color.Pink, Color.Gold, Color.Salmon };
+                Color[] clusterColor = new Color[] {
+                Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan,
+                Color.Magenta, Color.Orange, Color.Purple, Color.Lime, Color.Pink,
+                Color.Gold, Color.Salmon, Color.Aqua, Color.Fuchsia, Color.LimeGreen,
+                Color.Navy, Color.Olive, Color.Maroon, Color.Teal, Color.Silver,
+                Color.Brown, Color.Violet, Color.Indigo, Color.Coral, Color.Turquoise};
                 Color noiseColor = Color.FromArgb(64, 64, 64);
-
                 const double scale = 400.0 / 1024.0;
-
 
                 for (int i = 0; i < xs.Count; i++)
                 {
-                    Color pointColor;
-                    if (clusterId[i] == -1)
-                    {
-                        pointColor = noiseColor;
-                    }
-                    else
-                    {
-                        pointColor = clusterColor[clusterId[i] % clusterColor.Length];
-                    }
+                    Color pointColor = (clusterId[i] == -1)
+                        ? noiseColor
+                        : clusterColor[clusterId[i] % clusterColor.Length];
 
                     int px = (int)(xs[i] * scale);
                     int py = 399 - (int)(ys[i] * scale);
-
                     px = Math.Max(0, Math.Min(px, 399));
                     py = Math.Max(0, Math.Min(py, 399));
 
                     for (int dy = -1; dy <= 1; dy++)
-                    {
                         for (int dx = -1; dx <= 1; dx++)
                         {
                             int nx = px + dx;
                             int ny = py + dy;
                             if (nx >= 0 && nx < 400 && ny >= 0 && ny < 400)
-                            {
                                 bmp.SetPixel(nx, ny, pointColor);
-                            }
                         }
-                    }
                 }
-
                 float radiusInPixel = (float)(radius * scale);
-                Font font = new Font("Arial", 8, FontStyle.Bold);
-                Brush textBrush = Brushes.White;
+                Font font = new Font("Arial", 9, FontStyle.Bold);
                 Pen circlePen = new Pen(Color.White, 1.5f);
 
                 for (int k = 0; k < clusters.Count; k++)
@@ -450,31 +433,41 @@ namespace Lab_1_Zrenie
                         sumX += xs[idx];
                         sumY += ys[idx];
                     }
-
                     double centerX = sumX / clusters[k].Count;
                     double centerY = sumY / clusters[k].Count;
 
                     float px = (float)(centerX * scale);
                     float py = 399 - (float)(centerY * scale);
 
-                    px = Math.Max(radiusInPixel, Math.Min(px, 400 - radiusInPixel));
-                    py = Math.Max(radiusInPixel, Math.Min(py, 400 - radiusInPixel));
-
                     float rectX = px - radiusInPixel;
                     float rectY = py - radiusInPixel;
                     gfx.DrawEllipse(circlePen, rectX, rectY, radiusInPixel * 2, radiusInPixel * 2);
 
-
-
-                    string clusterNum = (k+1).ToString();
+                    string clusterNum = (k + 1).ToString();
                     SizeF textSize = gfx.MeasureString(clusterNum, font);
-                    gfx.DrawString(clusterNum, font, textBrush, px - textSize.Width / 2, py - textSize.Height / 2);
+
+                    float textX = px - textSize.Width / 2;
+                    float textY = py - textSize.Height / 2;
+
+                    if (textX < 3) textX = 3;
+                    if (textY < 3) textY = 3;
+                    if (textX + textSize.Width > 397) textX = 397 - textSize.Width;
+                    if (textY + textSize.Height > 397) textY = 397 - textSize.Height;
+
+                    using (var outlineBrush = new SolidBrush(Color.Black))
+                    {
+                        gfx.DrawString(clusterNum, font, outlineBrush, textX - 1, textY);
+                        gfx.DrawString(clusterNum, font, outlineBrush, textX + 1, textY);
+                        gfx.DrawString(clusterNum, font, outlineBrush, textX, textY - 1);
+                        gfx.DrawString(clusterNum, font, outlineBrush, textX, textY + 1);
+                        gfx.DrawString(clusterNum, font, Brushes.White, textX, textY);
+                    }
                 }
                 font.Dispose();
             }
+
             pictureBox1.Image?.Dispose();
             pictureBox1.Image = bmp;
-
 
             int dataIndex = 0;
             foreach (DataGridViewRow row in dataGridView1.Rows)
@@ -486,6 +479,7 @@ namespace Lab_1_Zrenie
                     row.Cells[3].Value = "—";
                     continue;
                 }
+
                 if (clusterId[dataIndex] == -1)
                     row.Cells[3].Value = "Шум";
                 else
